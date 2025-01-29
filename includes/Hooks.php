@@ -54,6 +54,7 @@ class Hooks implements BeforePageDisplayHook {
 	public function onBeforePageDisplay( $out, $skin ): void {
 		global $wgPageToMegaMenuList;
 
+		$numMenus = 0;
 		foreach ( $wgPageToMegaMenuList as $pageName => $cssSelector ) {
 			// TODO: save parsed HTML of all pages in $wgPageToMegaMenuList
 			// as hidden <div> tags, so that they can be used by JavaScript.
@@ -81,9 +82,13 @@ class Hooks implements BeforePageDisplayHook {
 				'class' => 'mw-megamenu',
 				'data-selector' => $cssSelector
 			], $html ) );
+
+			$numMenus++;
 		}
 
-		$out->addModules( 'ext.megamenu' );
-		$out->addModuleStyles( 'ext.megamenu.css' );
+		if ( $numMenus > 0 ) {
+			$out->addModules( 'ext.megamenu' );
+			$out->addModuleStyles( 'ext.megamenu.css' );
+		}
 	}
 }
