@@ -1,16 +1,16 @@
 /* Shows megamenu popups when user clicks some navigation links. */
 
 $( function () {
+	// User-added elements with class="mw-megamenu" are ignored,
+	// only the extension is allowed to add megamenus.
+	$( '.mw-parser-output .mw-megamenu' ).removeClass( 'mw-megamenu' );
+
+	// Attach the menu to links.
 	$( '.mw-megamenu' ).each( ( idx, menu ) => {
 		const $menu = $( menu ),
 			$link = $( $menu.attr( 'data-selector' ) );
-		if ( !$link.length ) {
-			return;
-		}
 
-		if ( $menu.parents( '.mw-parser-output' ).length ) {
-			// User-added elements with class="mw-megamenu" are ignored,
-			// only the extension is allowed to add megamenus.
+		if ( !$link.length ) {
 			return;
 		}
 
@@ -71,11 +71,16 @@ $( function () {
 	} );
 
 	/**
-	 * Show/hide $menu.
+	 * Show/hide $menu. Also hides other megamenus if they are currently being shown.
 	 *
 	 * @param {jQuery} $menu
 	 */
 	function toggleMenu( $menu ) {
-		$menu.css( 'display', $menu.css( 'display' ) === 'none' ? 'flex' : 'none' );
+		const wasHidden = $menu.css( 'display' ) === 'none';
+		$( '.mw-megamenu' ).hide();
+
+		if ( wasHidden ) {
+			$menu.css( 'display', 'flex' );
+		}
 	}
 }() );
