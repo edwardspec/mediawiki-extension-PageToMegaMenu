@@ -24,13 +24,26 @@
 namespace MediaWiki\PageToMegaMenu;
 
 use MediaWiki\Hook\BeforePageDisplayHook;
+use MediaWiki\Page\WikiPageFactory;
 use OutputPage;
 use Skin;
+use Title;
+use Xml;
 
 /**
  * Hooks of Extension:PageToMegaMenu.
  */
 class Hooks implements BeforePageDisplayHook {
+	/** @var WikiPageFactory */
+	protected $wikiPageFactory;
+
+	/**
+	 * @param WikiPageFactory $wikiPageFactory
+	 */
+	public function __construct( WikiPageFactory $wikiPageFactory ) {
+		$this->wikiPageFactory = $wikiPageFactory;
+	}
+
 	/**
 	 * Add "megamenu" module to articles.
 	 *
@@ -44,6 +57,30 @@ class Hooks implements BeforePageDisplayHook {
 		foreach ( $wgPageToMegaMenuList as $pageName => $cssSelector ) {
 			// TODO: save parsed HTML of all pages in $wgPageToMegaMenuList
 			// as hidden <div> tags, so that they can be used by JavaScript.
+			$title = Title::newFromText( $pageName );
+			if ( !$title ) {
+				continue;
+			}
+
+			$page = $this->wikiPageFactory->newFromTitle( $title );
+			if ( !$page ) {
+				continue;
+			}
+
+			$pout = $page->getParserOutput();
+			if ( !$pout ) {
+				continue;
+			}
+
+			$html = $pout->getText( [
+				'allowTOC' => false,
+				'enableSectionEditLinks' => false
+			] );
+
+			$out->addHTML( Xml::tags( 'div', [
+				'class' => 'mw-megamenu',
+				'data-selector' => $cssSelector
+			], $html ) );
 		}
 
 		$out->addModules( 'ext.megamenu' );

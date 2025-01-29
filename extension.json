@@ -14,7 +14,10 @@
 	},
 	"HookHandlers": {
 		"main": {
-			"class": "MediaWiki\\PageToMegaMenu\\Hooks"
+			"class": "MediaWiki\\PageToMegaMenu\\Hooks",
+			"services": [
+				"WikiPageFactory"
+			]
 		}
 	},
 	"Hooks": {
