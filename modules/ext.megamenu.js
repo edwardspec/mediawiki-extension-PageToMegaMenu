@@ -14,6 +14,26 @@ $( function () {
 			return;
 		}
 
+		const $toc = $( '<div>' ).attr( 'class', 'mw-megamenu-toc' );
+		$menu.find( 'h2' ).toArray().map( ( elem ) => elem.innerText ).forEach( ( headerText ) => {
+			$toc.append( $( '<div>' )
+				.attr( 'class', 'mw-megamenu-header' )
+				.append( headerText )
+			);
+		} );
+
+		// Split menu into sections (each prepended by <h2> header).
+		let html = $menu.html();
+		html = html.replace( /<h2>/g, '</div><div class="mw-megamenu-subsection"><h2>' );
+
+		$menu.empty().append(
+			$toc,
+			$( '<div>' ).attr( 'class', 'mw-megamenu-contents' ).append( html )
+		);
+
+		// TODO: only show 1 subsection at a time,
+		// switch to another section in "mouseenter" event of another section's header.
+
 		$link.click( ( ev ) => {
 			ev.preventDefault();
 			toggleMenu( $menu );
@@ -26,10 +46,6 @@ $( function () {
 	 * @param {jQuery} $menu
 	 */
 	function toggleMenu( $menu ) {
-		$menu.toggle();
-
-		// TODO: split menu into sections (each prepended by <h2> header)
-		// and turn <h2> tags into subsections. Only show 1 subsection at a time,
-		// switch to another section in "mouseenter" event of another section's header.
+		$menu.css( 'display', $menu.css( 'display' ) === 'none' ? 'flex' : 'none' );
 	}
 }() );
