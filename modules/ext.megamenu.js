@@ -31,22 +31,37 @@ $( function () {
 			$( '<div>' ).attr( 'class', 'mw-megamenu-contents' ).append( html )
 		);
 
-		// Show only 1 subsection at a time.
-		// We switch to another section in "mouseenter" event of another section's header.
-		const $sections = $( '.mw-megamenu-subsection' );
-		$sections.hide();
-		$sections.first().show();
+		const $headers = $( '.mw-megamenu-header' ),
+			$sections = $( '.mw-megamenu-subsection' );
 
-		$( '.mw-megamenu-header' ).each( ( headerIdx, header ) => {
+		$headers.each( ( headerIdx, header ) => {
 			$( header ).data( 'headerIdx', headerIdx );
 		} );
 
-		$( '.mw-megamenu-header' ).on( 'mouseenter', () => {
-			const $header = $( event.target );
-			const newSection = $sections[$header.data( 'headerIdx' )];
+		// Maximum height that the menu has ever assumed after showing a subsection.
+		let maxHeight = 0;
 
+		// Display one of the subsections of the menu.
+		// Hides the previously shown subsection.
+		function showSection( $header ) {
 			$sections.hide();
-			$( newSection ).show();
+			$( $sections[ $header.data( 'headerIdx' ) ] ).show();
+
+			// Don't reduce the size of menu when switching to a shorter section.
+			$menu.height( 'auto' );
+			maxHeight = Math.max( maxHeight, $menu.height() );
+			$menu.height( maxHeight );
+
+			$headers.removeClass( 'mw-megamenu-activetab' );
+			$header.addClass( 'mw-megamenu-activetab' );
+		}
+
+		$sections.hide();
+		$sections.first().show();
+		$headers.first().addClass( 'mw-megamenu-activetab' );
+
+		$headers.on( 'mouseenter', () => {
+			showSection( $( event.target ) );
 		} );
 
 		$link.click( ( ev ) => {

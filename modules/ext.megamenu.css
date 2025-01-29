@@ -31,3 +31,7 @@
 .mw-megamenu-header:not( :first-child ) {
 	border-top: 0;
 }
+
+.mw-megamenu-activetab {
+	background-color: #eee;
+}
