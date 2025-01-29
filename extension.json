@@ -1,0 +1,59 @@
+{
+	"name": "PageToMegaMenu",
+	"version": "0.0.1",
+	"author": "Edward Chernenko",
+	"url": "https://www.mediawiki.org/wiki/Extension:PageToMegaMenu",
+	"descriptionmsg": "megamenuwikipage-desc",
+	"license-name": "GPL-2.0+",
+	"requires": {
+		"MediaWiki": ">= 1.43.0"
+	},
+	"type": "skin",
+	"AutoloadClasses": {
+		"MediaWiki\\PageToMegaMenu\\Hooks": "includes/Hooks.php"
+	},
+	"HookHandlers": {
+		"main": {
+			"class": "MediaWiki\\PageToMegaMenu\\Hooks"
+		}
+	},
+	"Hooks": {
+		"BeforePageDisplay": "main"
+	},
+	"MessagesDirs": {
+		"PageToMegaMenu": [
+			"i18n"
+		]
+	},
+	"config": {
+		"PageToMegaMenuList": {
+			"value": {},
+			"description": "Key-value map. Keys: page titles (e.g. MediaWiki:AboutMenu) of pages that have contents of the megamenu (arbitrary wikitext). Values: CSS selector of link that should open this megamenu."
+		}
+	},
+	"ResourceModules": {
+		"ext.megamenu": {
+			"scripts": [
+				"ext.megamenu.js"
+			],
+			"targets": [
+				"desktop",
+				"mobile"
+			]
+		},
+		"ext.megamenu.css": {
+			"styles": [
+				"ext.megamenu.css"
+			],
+			"targets": [
+				"desktop",
+				"mobile"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "modules",
+		"remoteExtPath": "PageToMegaMenu/modules"
+	},
+	"manifest_version": 2
+}
