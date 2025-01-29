@@ -31,8 +31,8 @@ $( function () {
 			$( '<div>' ).attr( 'class', 'mw-megamenu-contents' ).append( html )
 		);
 
-		const $headers = $( '.mw-megamenu-header' ),
-			$sections = $( '.mw-megamenu-subsection' );
+		const $headers = $menu.find( '.mw-megamenu-header' ),
+			$sections = $menu.find( '.mw-megamenu-subsection' );
 
 		$headers.each( ( headerIdx, header ) => {
 			$( header ).data( 'headerIdx', headerIdx );
