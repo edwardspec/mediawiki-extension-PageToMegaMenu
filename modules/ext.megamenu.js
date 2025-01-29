@@ -31,8 +31,23 @@ $( function () {
 			$( '<div>' ).attr( 'class', 'mw-megamenu-contents' ).append( html )
 		);
 
-		// TODO: only show 1 subsection at a time,
-		// switch to another section in "mouseenter" event of another section's header.
+		// Show only 1 subsection at a time.
+		// We switch to another section in "mouseenter" event of another section's header.
+		const $sections = $( '.mw-megamenu-subsection' );
+		$sections.hide();
+		$sections.first().show();
+
+		$( '.mw-megamenu-header' ).each( ( headerIdx, header ) => {
+			$( header ).data( 'headerIdx', headerIdx );
+		} );
+
+		$( '.mw-megamenu-header' ).on( 'mouseenter', () => {
+			const $header = $( event.target );
+			const newSection = $sections[$header.data( 'headerIdx' )];
+
+			$sections.hide();
+			$( newSection ).show();
+		} );
 
 		$link.click( ( ev ) => {
 			ev.preventDefault();
